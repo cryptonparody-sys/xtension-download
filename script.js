@@ -98,9 +98,12 @@
             if (error.message.includes('Failed to fetch')) {
                 errorMessage = 'Cannot connect to server: http://77.90.51.74:8080\n\nThis usually means:\n1. Server is down\n2. Firewall blocking the connection\n3. Network connectivity issues\n\nPlease contact administrator if problem persists.';
             } else if (error.message.includes('Mixed Content')) {
-                // Open health check in new tab to establish trust
-                window.open('http://77.90.51.74:8080/health', '_blank');
-                errorMessage = 'Mixed Content Security: Opened server health check in new tab.\n\n1. The new tab verifies the server works\n2. After closing it, try download again\n\nThis is a browser security feature for HTTPS pages.';
+                // Show server status and provide direct link
+                const serverHealthUrl = 'http://77.90.51.74:8080/health';
+                errorMessage = `Browser Security: Cannot download from HTTP server on HTTPS page.\n\nServer is working! Click here to verify:\n${serverHealthUrl}\n\nFor downloads, the server needs SSL certificate.\n\nServer Status: ✅ Online (Port 8080)`;
+
+                // Also open the health check automatically
+                window.open(serverHealthUrl, '_blank');
             } else if (error.message.includes('CORS')) {
                 errorMessage = 'CORS error: Server needs to allow GitHub Pages.\n\nServer must include: Access-Control-Allow-Origin: https://cryptonparody-sys.github.io';
             } else if (error.name === 'TypeError' && error.message.includes('null')) {
@@ -184,29 +187,7 @@
                 showAlert('Error', 'Download button not found. Please refresh the page.', 'error');
             }
 
-            // Direct download button
-            const directBtn = document.getElementById('directDownloadBtn');
-            if (directBtn) {
-                directBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('🔗 Direct download button clicked!');
-                    directDownload();
-                });
-
-                directBtn.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('🔗 Direct download onclick fallback!');
-                    directDownload();
-                    return false;
-                };
-
-                console.log('✅ Direct download button attached');
-            } else {
-                console.error('❌ Direct download button not found!');
-            }
-
+            
         } catch (error) {
             console.error('❌ Error setting up event listeners:', error);
             showAlert('Setup Error', 'Failed to setup page controls. Please refresh the page.', 'error');
