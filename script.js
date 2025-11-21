@@ -4,7 +4,7 @@
 (function() {
     'use strict';
 
-    console.log('🚀 Xtension Download Script - FIXED VERSION');
+    console.log('🚀 Xtension Download Script - FINAL VERSION v1.0');
 
     // Configuration - Server running on port 8080 (HTTP)
     const CONFIG = {
@@ -244,6 +244,6 @@
     setTimeout(init, 500);
     setTimeout(init, 1000);
 
-    console.log('📄 Xtension Download Script loaded successfully - HTTPS FIXED');
+    console.log('📄 Xtension Download Script v1.0 loaded successfully - HTTP port 8080');
 
 })();
