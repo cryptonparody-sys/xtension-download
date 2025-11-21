@@ -1,12 +1,12 @@
-// Xtension Download Script - SIMPLIFIED HTTPS VERSION
-// Fixed for mixed content and null reference issues
+// Xtension Download Script - CACHE-BUSTING VERSION v2.0
+// Force browser to load new version
 
 (function() {
     'use strict';
 
-    console.log('🚀 Xtension Download Script - HTTPS VERSION');
+    console.log('🚀 Xtension Download Script - CACHE-BUSTING VERSION v2.0');
 
-    // Configuration - Fixed HTTPS
+    // Configuration - HTTPS ONLY (no HTTP fallback)
     const CONFIG = {
         serverUrl: 'https://77.90.51.74:8080',
         endpoint: '/api/generate-download-url',
@@ -15,6 +15,18 @@
     };
 
     let isDownloading = false;
+
+    // Clear any cached versions
+    if (window.XtensionDownloadLoaded) {
+        console.warn('⚠️ XtensionDownload already loaded, clearing cache...');
+        // Remove old event listeners
+        const oldBtn = document.getElementById('downloadBtn');
+        if (oldBtn) {
+            const newBtn = oldBtn.cloneNode(true);
+            oldBtn.parentNode.replaceChild(newBtn, oldBtn);
+        }
+    }
+    window.XtensionDownloadLoaded = true;
 
     // Simple alert-based modal to avoid DOM issues
     function showAlert(title, message, type = 'info') {
@@ -32,10 +44,9 @@
     // Show loading
     function showLoading(message) {
         console.log('⏳', message);
-        // We'll use console.log instead of modal to avoid DOM issues
     }
 
-    // Main download function - simplified
+    // Main download function
     async function startDownload() {
         if (isDownloading) {
             console.log('⚠️ Already downloading...');
@@ -48,10 +59,11 @@
         try {
             showLoading('Connecting to server...');
 
-            // Generate download URL
-            console.log('📡 Making API call to:', CONFIG.serverUrl + CONFIG.endpoint);
+            // Construct HTTPS URL
+            const apiUrl = CONFIG.serverUrl + CONFIG.endpoint;
+            console.log('📡 Making HTTPS API call to:', apiUrl);
 
-            const response = await fetch(CONFIG.serverUrl + CONFIG.endpoint, {
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -96,11 +108,11 @@
             let errorMessage = error.message;
 
             if (error.message.includes('Failed to fetch')) {
-                errorMessage = 'Cannot connect to server. The server may be down or not supporting HTTPS. Please try again later.';
+                errorMessage = 'Cannot connect to server: https://77.90.51.74:8080\n\nThis usually means:\n1. Server is down\n2. Server does not have HTTPS/SSL certificate\n3. Firewall blocking the connection\n\nPlease contact administrator to set up HTTPS on the server.';
             } else if (error.message.includes('Mixed Content')) {
-                errorMessage = 'Security error: Server must use HTTPS. Please contact administrator.';
+                errorMessage = 'Security error: Browser blocked HTTP request from HTTPS page.\n\nThe server at 77.90.51.74:8080 needs an SSL certificate for HTTPS.';
             } else if (error.message.includes('CORS')) {
-                errorMessage = 'CORS error: Server configuration issue. Please contact administrator.';
+                errorMessage = 'CORS error: Server needs to allow GitHub Pages.\n\nServer must include: Access-Control-Allow-Origin: https://cryptonparody-sys.github.io';
             } else if (error.name === 'TypeError' && error.message.includes('null')) {
                 errorMessage = 'Page error. Please refresh the page and try again.';
             }
@@ -144,7 +156,7 @@
         });
     }
 
-    // Setup event listeners - SIMPLE VERSION
+    // Setup event listeners
     function setupEventListeners() {
         console.log('🔧 Setting up event listeners...');
 
@@ -190,7 +202,7 @@
 
     // Initialize application
     function init() {
-        console.log('🚀 Initializing application...');
+        console.log('🚀 Initializing Xtension Download v2.0...');
 
         try {
             // Check if download button exists
@@ -213,8 +225,13 @@
                 startDownload();
             };
 
-            console.log('✅ Application initialized successfully');
+            console.log('✅ Xtension Download v2.0 initialized successfully');
             console.log('💡 Available commands: startDownload(), testDownload()');
+            console.log('🔧 Server URL:', CONFIG.serverUrl);
+
+            // Show version info in console
+            console.log('📦 Version: 2.0 (Cache-Busting)');
+            console.log('⏰ Loaded at:', new Date().toISOString());
 
             // Auto-test after 2 seconds
             setTimeout(() => {
@@ -243,6 +260,6 @@
     setTimeout(init, 500);
     setTimeout(init, 1000);
 
-    console.log('📄 Xtension Download Script loaded successfully - HTTPS VERSION');
+    console.log('📄 Xtension Download Script v2.0 loaded successfully');
 
 })();
