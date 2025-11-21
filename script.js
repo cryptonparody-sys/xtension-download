@@ -97,8 +97,10 @@
 
             if (error.message.includes('Failed to fetch')) {
                 errorMessage = 'Cannot connect to server: http://77.90.51.74:8080\n\nThis usually means:\n1. Server is down\n2. Firewall blocking the connection\n3. Network connectivity issues\n\nPlease contact administrator if problem persists.';
-            } else if (error.message.includes('Mixed Content') || error.message.includes('ERR_BLOCKED_BY_CLIENT')) {
-                errorMessage = 'Mixed Content Error: Browser blocked HTTP from HTTPS page.\n\nTry this workaround:\n1. Copy this link: http://77.90.51.74:8080/health\n2. Open it in a new tab to verify server works\n3. Then try download again\n\nOr use the direct download method.';
+            } else if (error.message.includes('Mixed Content')) {
+                // Open health check in new tab to establish trust
+                window.open('http://77.90.51.74:8080/health', '_blank');
+                errorMessage = 'Mixed Content Security: Opened server health check in new tab.\n\n1. The new tab verifies the server works\n2. After closing it, try download again\n\nThis is a browser security feature for HTTPS pages.';
             } else if (error.message.includes('CORS')) {
                 errorMessage = 'CORS error: Server needs to allow GitHub Pages.\n\nServer must include: Access-Control-Allow-Origin: https://cryptonparody-sys.github.io';
             } else if (error.name === 'TypeError' && error.message.includes('null')) {
