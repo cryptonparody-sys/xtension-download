@@ -47,9 +47,9 @@
         try {
             showLoading('Connecting to server...');
 
-            // Construct HTTPS URL
+            // Construct HTTP URL
             const apiUrl = CONFIG.serverUrl + CONFIG.endpoint;
-            console.log('📡 Making HTTPS API call to:', apiUrl);
+            console.log('📡 Making HTTP API call to:', apiUrl);
 
             const response = await fetch(apiUrl, {
                 method: 'POST',
