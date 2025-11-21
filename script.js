@@ -184,6 +184,29 @@
                 showAlert('Error', 'Download button not found. Please refresh the page.', 'error');
             }
 
+            // Direct download button
+            const directBtn = document.getElementById('directDownloadBtn');
+            if (directBtn) {
+                directBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('🔗 Direct download button clicked!');
+                    directDownload();
+                });
+
+                directBtn.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('🔗 Direct download onclick fallback!');
+                    directDownload();
+                    return false;
+                };
+
+                console.log('✅ Direct download button attached');
+            } else {
+                console.error('❌ Direct download button not found!');
+            }
+
         } catch (error) {
             console.error('❌ Error setting up event listeners:', error);
             showAlert('Setup Error', 'Failed to setup page controls. Please refresh the page.', 'error');
@@ -213,6 +236,11 @@
             window.testDownload = function() {
                 console.log('🧪 Testing download function...');
                 startDownload();
+            };
+            window.directDownload = function() {
+                console.log('🔗 Direct download link opened');
+                window.open('http://77.90.51.74:8080/health', '_blank');
+                alert('Direct Download:\n\n1. The health check opens in new tab\n2. This proves the server works\n3. For the actual file, you need to get the download URL from the server\n\nNote: This browser security issue requires SSL certificate to fully resolve.');
             };
 
             console.log('✅ Application initialized successfully');
