@@ -1,12 +1,12 @@
-// Xtension Download Script - CACHE-BUSTING VERSION v2.0
-// Force browser to load new version
+// Xtension Download Script - FIXED VERSION
+// Fixed HTTPS mixed content error
 
 (function() {
     'use strict';
 
-    console.log('🚀 Xtension Download Script - CACHE-BUSTING VERSION v2.0');
+    console.log('🚀 Xtension Download Script - FIXED VERSION');
 
-    // Configuration - HTTPS ONLY (no HTTP fallback)
+    // Configuration - HTTPS ONLY
     const CONFIG = {
         serverUrl: 'https://77.90.51.74:8080',
         endpoint: '/api/generate-download-url',
@@ -15,18 +15,6 @@
     };
 
     let isDownloading = false;
-
-    // Clear any cached versions
-    if (window.XtensionDownloadLoaded) {
-        console.warn('⚠️ XtensionDownload already loaded, clearing cache...');
-        // Remove old event listeners
-        const oldBtn = document.getElementById('downloadBtn');
-        if (oldBtn) {
-            const newBtn = oldBtn.cloneNode(true);
-            oldBtn.parentNode.replaceChild(newBtn, oldBtn);
-        }
-    }
-    window.XtensionDownloadLoaded = true;
 
     // Simple alert-based modal to avoid DOM issues
     function showAlert(title, message, type = 'info') {
@@ -202,7 +190,7 @@
 
     // Initialize application
     function init() {
-        console.log('🚀 Initializing Xtension Download v2.0...');
+        console.log('🚀 Initializing application...');
 
         try {
             // Check if download button exists
@@ -225,13 +213,9 @@
                 startDownload();
             };
 
-            console.log('✅ Xtension Download v2.0 initialized successfully');
+            console.log('✅ Application initialized successfully');
             console.log('💡 Available commands: startDownload(), testDownload()');
             console.log('🔧 Server URL:', CONFIG.serverUrl);
-
-            // Show version info in console
-            console.log('📦 Version: 2.0 (Cache-Busting)');
-            console.log('⏰ Loaded at:', new Date().toISOString());
 
             // Auto-test after 2 seconds
             setTimeout(() => {
@@ -260,6 +244,6 @@
     setTimeout(init, 500);
     setTimeout(init, 1000);
 
-    console.log('📄 Xtension Download Script v2.0 loaded successfully');
+    console.log('📄 Xtension Download Script loaded successfully - HTTPS FIXED');
 
 })();
